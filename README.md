@@ -8,7 +8,9 @@
 ## Server:
 - cd src/server
 - make server
+- ./server
 
 ## Client:
 - cd src/client
 - make client
+- ./client
