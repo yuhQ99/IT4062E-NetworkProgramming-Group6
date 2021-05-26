@@ -1,0 +1,14 @@
+1 huy 2
+2 huyen 2
+3 huy 2
+4 hung 10
+5 huy 2
+6 huy 10
+7 huy 2
+8 hung 2
+9 huy 2
+10 hung 10
+11 huy 2
+12 huy 10
+13 tung 2
+14 huy 10
