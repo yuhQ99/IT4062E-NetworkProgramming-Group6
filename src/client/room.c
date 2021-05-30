@@ -8,16 +8,6 @@ char roomID[10];
 char room_choice[3];
 char noti[100];
 
-// void str_trim_lf (char* arr, int length) {
-//   	int i;
-//   	for (i = 0; i < length; i++) { // trim \n
-//     	if (arr[i] == '\n') {
-//       		arr[i] = '\0';
-//       		break;
-//     	}
-//   	}
-// }
-
 void room_init() {
     builder = gtk_builder_new();
     gtk_builder_add_from_file (builder, "../../glade/homescreen.glade", NULL);

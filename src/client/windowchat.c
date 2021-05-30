@@ -65,9 +65,13 @@ void on_entry_message_changed(GtkEntry *e) {
 void on_button_send_message_clicked() {
     add_to_list(mess);
     char buffer[LENGTH + 32] = {};
-    sprintf(buffer, "%s: %s\n", username, mess);
-    send(sockfd, buffer, strlen(buffer), 0);
-
+    if(strcmp(mess, "exit") == 0) {
+        on_window_chat_destroy();
+    } else {
+        sprintf(buffer, "%s: %s\n", username, mess);
+        send(sockfd, buffer, strlen(buffer), 0);
+    }
+    
     bzero(mess, LENGTH);
     bzero(buffer, LENGTH + 32);
     gtk_entry_set_text(GTK_ENTRY(entry_message),"");
