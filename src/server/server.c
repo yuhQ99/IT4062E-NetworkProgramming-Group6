@@ -235,9 +235,9 @@ void *handle_client(void *arg){
 				if(node != NULL) {
 					int mem = node->room->memberCount + 1;
 					if(mem > node->room->roomMaxClient) {
-						accNode_t* node = searchAccount(accHead, name);
-						node->acc->status = 0;
-						leave_flag = 1;
+						// accNode_t* node = searchAccount(accHead, name);
+						// node->acc->status = 0;
+						// leave_flag = 1;
 						sprintf(noti, "Max Client in this room!");
 						send(cli->sockfd, noti, 100, 0);
 						continue;
@@ -251,9 +251,9 @@ void *handle_client(void *arg){
 					}
 				}
 				else {
-					accNode_t* node = searchAccount(accHead, name);
-					node->acc->status = 0;
-					leave_flag = 1;
+					// accNode_t* node = searchAccount(accHead, name);
+					// node->acc->status = 0;
+					// leave_flag = 1;
 					sprintf(noti, "Room %d not found", atoi(room));
 					send(cli->sockfd, noti, 30, 0);
 					continue;
@@ -279,14 +279,8 @@ void *handle_client(void *arg){
 		}
 
 		receive = recv(cli->sockfd, buff_out, BUFFER_SZ, 0);
-		if (receive > 0){
-			if(strlen(buff_out) > 0){
-				send_message(buff_out, cli->uid, cli->room);
-
-				str_trim_lf(buff_out, strlen(buff_out));
-				printf("%s -> Room %d\n", buff_out, cli->room);
-			}
-		} else if (receive == 0 || strcmp(buff_out, "exit") == 0){
+	
+		if (receive == 0 || strcmp(buff_out, "exit") == 0){
 			roomNode_t * node = searchRoom (roomHead, cli->room);
 			node->room->memberCount = node->room->memberCount - 1;
 			accNode_t* nodeAcc = searchAccount(accHead, name);
@@ -295,6 +289,13 @@ void *handle_client(void *arg){
 			printf("(Room %d) %s", cli->room, buff_out);
 			send_message(buff_out, cli->uid, cli->room);
 			leave_flag = 1;
+		}  else if (receive > 0){
+			if(strlen(buff_out) > 0){
+				send_message(buff_out, cli->uid, cli->room);
+
+				str_trim_lf(buff_out, strlen(buff_out));
+				printf("%s -> Room %d\n", buff_out, cli->room);
+			}
 		} else {
 			printf("ERROR: -1\n");
 			leave_flag = 1;
