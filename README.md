@@ -7,7 +7,7 @@
 # Run
 ## Server:
 - cd src/server
-- make server
+- make compile
 - ./server
 
 ## Client:
