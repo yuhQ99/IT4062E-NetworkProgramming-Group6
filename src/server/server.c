@@ -23,12 +23,12 @@ roomNode_t* roomHead;
 accNode_t* accHead;
 
 int rid;
-/* Client structure */
+
 typedef struct{
-	struct sockaddr_in address; // client address
-	int sockfd; // socket descriptor
-	int uid; // user id
-	char name[32]; // username
+	struct sockaddr_in address;
+	int sockfd;
+	int uid;
+	char name[32];
 	int room;
 } client_t;
 
@@ -59,13 +59,11 @@ void print_client_addr(struct sockaddr_in addr){
         (addr.sin_addr.s_addr & 0xff000000) >> 24);
 }
 
-/* Add clients to queue */
 void queue_add(client_t *cl){
-	// mutex: guarantee thread synchronous, a thread connect to a mutex by lock a mutex, then do some function, then unlock mutex in order that other thread can access the mutex
 	pthread_mutex_lock(&clients_mutex);
 
 	for(int i=0; i < MAX_CLIENTS; ++i){
-		if(!clients[i]){ // if there is no client in clients array (clients[i])
+		if(!clients[i]){ 
 			clients[i] = cl;
 			break;
 		}
@@ -74,7 +72,7 @@ void queue_add(client_t *cl){
 	pthread_mutex_unlock(&clients_mutex);
 }
 
-/* Remove clients to queue */
+
 void queue_remove(int uid){
 	pthread_mutex_lock(&clients_mutex);
 
@@ -235,9 +233,6 @@ void *handle_client(void *arg){
 				if(node != NULL) {
 					int mem = node->room->memberCount + 1;
 					if(mem > node->room->roomMaxClient) {
-						accNode_t* node = searchAccount(accHead, name);
-						node->acc->status = 0;
-						leave_flag = 1;
 						sprintf(noti, "Max Client in this room!");
 						send(cli->sockfd, noti, 100, 0);
 						continue;
@@ -251,9 +246,6 @@ void *handle_client(void *arg){
 					}
 				}
 				else {
-					accNode_t* node = searchAccount(accHead, name);
-					node->acc->status = 0;
-					leave_flag = 1;
 					sprintf(noti, "Room %d not found", atoi(room));
 					send(cli->sockfd, noti, 30, 0);
 					continue;
@@ -380,11 +372,10 @@ int main(int argc, char **argv){
 		cli->sockfd = connfd;
 		cli->uid = uid++;
 
-		/* Add client to the queue and fork thread */
 		queue_add(cli);
 		pthread_create(&tid, NULL, &handle_client, (void*)cli);
 
-		/* Reduce CPU usage */
+		
 		sleep(1);
 	}
 
